@@ -108,12 +108,16 @@ public class PanelJuego extends JPanel{
         btnSonido.addActionListener(e -> cambiarSonido());
     }
     
-    private void iniciar(JuegoAhorcado nuevoJuego){
-        juego=nuevoJuego;
+    public void iniciar(JuegoAhorcado nuevoJuego){
+        juego = nuevoJuego;
+
         txtLetra.setEnabled(true);
         btnProbar.setEnabled(true);
         txtLetra.setText("");
+
         lblMensaje.setText("Ingrese una letra para comenzar.");
+        lblMensaje.setForeground(Color.BLACK);
+
         actualizar();
     }
     
@@ -132,6 +136,11 @@ public class PanelJuego extends JPanel{
         lblIntentos.setText( "Intentos: " + juego.getIntentosRestantes() + " / 6");
         lblAcertadas.setText("Acertadas: " + juego.getLetrasAcertadas());
         lblErradas.setText("Erradas: " + juego.getLetrasErradas());
+        lblAcertadas.setForeground(new Color(0, 130, 0));
+        lblErradas.setForeground(Color.RED);
+        
+        // Pendiente: actualizar el dibujo cuando PanelDibujo este disponible.
+        // panelDibujo.setEtapa(juego.getEtapa());
     }
     
     private void probarLetra(){
@@ -176,8 +185,34 @@ public class PanelJuego extends JPanel{
     }
     
     private void reiniciarJuego(){
-        //pendiente juego.reiniciar();
-        lblMensaje.setText("Nueva partida pendiente de integrar.");
+        if (juego == null) {
+        return;
+        }
+
+        if (juego.getModalidad() == Modalidad.PALABRA_FIJA) {
+
+            ventana.mostrar(VentanaPrincipal.MENU);
+            return;
+        }
+
+        try {
+
+            juego.reiniciar();
+
+            txtLetra.setEnabled(true);
+            btnProbar.setEnabled(true);
+
+            txtLetra.setText("");
+
+            lblMensaje.setText("Nueva partida iniciada.");
+            lblMensaje.setForeground(Color.BLACK);
+
+            actualizar();
+
+        } catch (PalabraInvalidaException ex) {
+
+            JOptionPane.showMessageDialog(this,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void cambiarSonido(){
