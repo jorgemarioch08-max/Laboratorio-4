@@ -9,6 +9,7 @@ package juego_ahorcado.gui;
  *
  * @author segio
  */
+import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -20,9 +21,18 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-//Pendiente importar las clases del modelo y las excepciones
+import modelo.JuegoAhorcado;
+import modelo.ResultadoLetra;
+import modelo.EstadoPartida;
+import modelo.Modalidad;
+import excepciones.LetraInvalidaException;
+import excepciones.LetraRepetidaException;
+import excepciones.PartidaTerminadaException;
+import excepciones.PalabraInvalidaException;
+
 public class PanelJuego extends JPanel{
     private VentanaPrincipal ventana;
+    private JuegoAhorcado juego;
     private JLabel lblPalabra;
     private JLabel lblIntentos;
     private JLabel lblAcertadas;
@@ -98,11 +108,71 @@ public class PanelJuego extends JPanel{
         btnSonido.addActionListener(e -> cambiarSonido());
     }
     
-    private void probarLetra(){
-        String letra = txtLetra.getText();
-        //Pendiente
-        JOptionPane.showMessageDialog(this,"La logica del juego esta pendiente de integrar.");
+    private void iniciar(JuegoAhorcado nuevoJuego){
+        juego=nuevoJuego;
+        txtLetra.setEnabled(true);
+        btnProbar.setEnabled(true);
         txtLetra.setText("");
+        lblMensaje.setText("Ingrese una letra para comenzar.");
+        actualizar();
+    }
+    
+    private void actualizar(){
+        if (juego==null) {
+            return;
+        }
+        
+        String palabra=juego.getPalabraMostrada();
+        String palabraSeparada = "";
+        for (int i = 0; i < palabra.length(); i++){
+            palabraSeparada += palabra.charAt(i) + " ";
+        }
+        
+        lblPalabra.setText(palabraSeparada);
+        lblIntentos.setText( "Intentos: " + juego.getIntentosRestantes() + " / 6");
+        lblAcertadas.setText("Acertadas: " + juego.getLetrasAcertadas());
+        lblErradas.setText("Erradas: " + juego.getLetrasErradas());
+    }
+    
+    private void probarLetra(){
+        if (juego == null){
+            return;
+        }
+        String letra = txtLetra.getText();
+        try{
+            ResultadoLetra resultado = juego.ingresarLetra(letra);
+            if (resultado == ResultadoLetra.CORRECTO){
+                lblMensaje.setText("¡Letra correcta!");
+                lblMensaje.setForeground(Color.GREEN);
+            }else{
+                lblMensaje.setText("Letra incorrecta.");
+                lblMensaje.setForeground(Color.RED);
+            }
+            actualizar();
+            if (juego.getEstado() == EstadoPartida.GANADA){
+                lblMensaje.setText("¡Felicidades! Ganaste la partida.");
+                lblMensaje.setForeground(Color.GREEN);
+                txtLetra.setEnabled(false);
+                btnProbar.setEnabled(false);
+            }else if(juego.getEstado() == EstadoPartida.PERDIDA){
+                lblMensaje.setText("Perdiste. La palabra era: " + juego.getPalabraSecreta());
+                lblMensaje.setForeground(Color.RED);
+                txtLetra.setEnabled(false);
+                btnProbar.setEnabled(false);
+            }
+            
+        }catch (LetraInvalidaException ex){
+            lblMensaje.setText(ex.getMessage());
+            lblMensaje.setForeground(Color.RED);
+        }catch (LetraRepetidaException ex){
+            lblMensaje.setText(ex.getMessage());
+            lblMensaje.setForeground(Color.RED);
+        }catch (PartidaTerminadaException ex){
+            lblMensaje.setText(ex.getMessage());
+            lblMensaje.setForeground(Color.RED);
+        }
+        txtLetra.setText("");
+        txtLetra.requestFocusInWindow();
     }
     
     private void reiniciarJuego(){
