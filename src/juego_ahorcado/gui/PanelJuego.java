@@ -36,7 +36,7 @@ import excepciones.PartidaTerminadaException;
 import excepciones.PalabraInvalidaException;
 
 public class PanelJuego extends JPanel{
-     private VentanaPrincipal ventana;
+    private VentanaPrincipal ventana;
     private JuegoAhorcado juego;
 
     private JLabel lblPalabra;
@@ -52,7 +52,7 @@ public class PanelJuego extends JPanel{
     private JButton btnMenu;
     private JButton btnSonido;
 
-    private JPanel panelDibujo;
+    private PanelDibujo panelDibujo;
 
     public PanelJuego(VentanaPrincipal ventana) {
 
@@ -84,12 +84,11 @@ public class PanelJuego extends JPanel{
         // Panel central
         JPanel panelCentral = new JPanel(new GridLayout(1, 2, 10, 10));
 
-        panelDibujo = new JPanel();
+        panelDibujo = new PanelDibujo();
+
         panelDibujo.setBorder(
                 BorderFactory.createTitledBorder("Ahorcado")
         );
-
-        // Pendiente: integrar PanelDibujo del integrante A.
 
         JPanel panelLetras = new JPanel(new GridLayout(2, 1, 5, 5));
 
@@ -149,6 +148,8 @@ public class PanelJuego extends JPanel{
                 ventana.mostrar(VentanaPrincipal.MENU));
 
         btnSonido.addActionListener(e -> cambiarSonido());
+
+        actualizarBotonSonido();
     }
 
     // Iniciar una partida
@@ -164,7 +165,6 @@ public class PanelJuego extends JPanel{
         lblMensaje.setForeground(Color.BLACK);
 
         actualizarBotonSonido();
-
         actualizar();
 
         txtLetra.requestFocusInWindow();
@@ -198,8 +198,8 @@ public class PanelJuego extends JPanel{
                 "Erradas: " + juego.getLetrasErradas()
         );
 
-        // Pendiente: actualizar el dibujo del ahorcado.
-        // panelDibujo.setEtapa(juego.getEtapa());
+        // Actualizar el dibujo del ahorcado
+        panelDibujo.setEtapa(juego.getEtapa());
     }
 
     // Probar la letra ingresada
