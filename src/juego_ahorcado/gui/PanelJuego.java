@@ -188,36 +188,34 @@ public class PanelJuego extends JPanel{
         if (juego == null) {
         return;
         }
-
         if (juego.getModalidad() == Modalidad.PALABRA_FIJA) {
-
             ventana.mostrar(VentanaPrincipal.MENU);
             return;
         }
 
         try {
-
             juego.reiniciar();
-
             txtLetra.setEnabled(true);
             btnProbar.setEnabled(true);
-
             txtLetra.setText("");
-
             lblMensaje.setText("Nueva partida iniciada.");
             lblMensaje.setForeground(Color.BLACK);
-
             actualizar();
-
         } catch (PalabraInvalidaException ex) {
-
             JOptionPane.showMessageDialog(this,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
     }
     
     private void cambiarSonido(){
-        //Pendiente
-        lblMensaje.setText("Control de sonido pendiente de integrar.");
+       boolean silenciado = ventana.getSonido().isSilenciado();
+
+        ventana.getSonido().setSilenciado(!silenciado);
+
+        if (ventana.getSonido().isSilenciado()) {
+            btnSonido.setText("Sonido: Desactivado");
+        } else {
+            btnSonido.setText("Sonido: Activado");
+        } 
     }
     
 }
