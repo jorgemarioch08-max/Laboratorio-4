@@ -11,7 +11,7 @@ public class UtilTexto {
             return "";
         }
 
-        String mayuscula = texto.toLowerCase();
+        String mayuscula = texto.toUpperCase();
         String resultado = "";
 
         for (int i = 0; i < mayuscula.length(); i++) {
