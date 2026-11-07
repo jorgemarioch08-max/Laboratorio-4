@@ -111,10 +111,9 @@ public abstract class JuegoBase implements JuegoAhorcado, Serializable {
                     "Ingrese una letra"
             );
         }
-
-        // Paso 4
+                // Paso 4
         if (letrasAcertadas.contains(letra)||letrasErradas.contains(letra)) {
-            throw new LetraRepetidaException("La letra "+letra+" ya fue ingresada, pruebe con otra");
+                throw new LetraRepetidaException("La letra "+letra+" ya fue ingresada, pruebe con otra", letra);
         }
 
         // Paso 5
