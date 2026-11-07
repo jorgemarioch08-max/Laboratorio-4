@@ -27,3 +27,41 @@ JuegoBase: clase abstracta que contiene la lógica general, como el registro de 
 - ResultadoLetra: enum que indica si una letra ingresada fue un acierto o un error.
 - Modalidad: enum que identifica el tipo de partida.
 - EtapaAhorcado: enum que representa las etapas del dibujo del ahorcado.
+### Uso de Serializable
+
+Serializable es una interfaz marcadora: no tiene métodos, solo indica que los objetos
+de la clase se pueden convertir a bytes. No guardamos archivos; la declaramos porque
+el diseño lo pide.
+
+- Cada clase lleva su propio serialVersionUID, porque este campo no se hereda.
+- AdministradorPalabras es serializable porque JuegoAlAzar lo usa como atributo.
+- No declaramos el Random como transient porque Random ya es serializable.
+
+### Diagrama de clases
+
+```mermaid
+classDiagram
+    class JuegoAhorcado {
+        <<interface>>
+    }
+    class JuegoBase {
+        <<abstract>>
+    }
+    JuegoAhorcado <|.. JuegoBase
+    JuegoBase <|-- JuegoPalabraFija
+    JuegoBase <|-- JuegoAlAzar
+    JuegoAlAzar o-- AdministradorPalabras
+    JuegoBase ..> UtilTexto
+    AdministradorPalabras ..> UtilTexto
+    Exception <|-- AhorcadoException
+    AhorcadoException <|-- LetraInvalidaException
+    AhorcadoException <|-- LetraRepetidaException
+    AhorcadoException <|-- PartidaTerminadaException
+    AhorcadoException <|-- PalabraInvalidaException
+    AhorcadoException <|-- PalabraDuplicadaException
+    VentanaPrincipal *-- PanelMenu
+    VentanaPrincipal *-- PanelJuego
+    VentanaPrincipal *-- PanelAdministracion
+    VentanaPrincipal *-- GestorSonido
+    PanelJuego *-- PanelDibujo
+```
