@@ -4,13 +4,15 @@ package juego_ahorcado;
  *
  * 7/11/2026
  */
+import javax.swing.SwingUtilities;
+import juego_ahorcado.gui.VentanaPrincipal;
 public class Juego_Ahorcado {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         // TODO code application logic here
+        SwingUtilities.invokeLater(() -> {VentanaPrincipal ventana = new VentanaPrincipal();
+        ventana.setVisible(true);
+        });
     }
     
 }
