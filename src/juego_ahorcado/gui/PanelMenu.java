@@ -9,7 +9,7 @@ package juego_ahorcado.gui;
  *
  * @author segio
  */
-import java.awt.GridLayout;
+import java.awt.*;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,7 +35,8 @@ public class PanelMenu extends JPanel{
         this.admin = admin;
         this.ventana = ventana;
 
-        setLayout(new GridLayout(5, 1, 10, 10));
+        setLayout(new GridBagLayout());
+        JPanel columna = new JPanel(new GridLayout(5, 1, 10, 10));
 
         JLabel titulo = new JLabel("JUEGO DEL AHORCADO");
         titulo.setHorizontalAlignment(JLabel.CENTER);
@@ -45,11 +46,23 @@ public class PanelMenu extends JPanel{
         btnAdministrar = new JButton("Administrar palabras");
         btnSalir = new JButton("Salir");
 
-        add(titulo);
-        add(btnPalabraFija);
-        add(btnPalabraAzar);
-        add(btnAdministrar);
-        add(btnSalir);
+        btnPalabraFija.setPreferredSize(new Dimension(200, 75));
+        btnPalabraAzar.setMaximumSize(new Dimension(200, 75));
+        btnPalabraAzar.setPreferredSize(new Dimension(200, 75));
+        btnAdministrar.setMaximumSize(new Dimension(200, 75));
+        btnAdministrar.setPreferredSize(new Dimension(200, 75));
+        btnAdministrar.setMaximumSize(new Dimension(200, 75));
+        btnSalir.setPreferredSize(new Dimension(200, 75));
+        btnSalir.setMaximumSize(new Dimension(200, 75));
+
+
+        columna.add(titulo);
+        columna.add(btnPalabraFija);
+        columna.add(btnPalabraAzar);
+        columna.add(btnAdministrar);
+        columna.add(btnSalir);
+
+        add(columna);
 
         btnPalabraFija.addActionListener(e -> jugarPalabraFija());
 
